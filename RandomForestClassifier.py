@@ -11,7 +11,11 @@ import joblib
 
 
 # --- 1. Configuration & Data Loading ---
-DATASET_PATH = r"C:\Users\mfone\Desktop\Programs\NIDS\CIC-IDS2017" 
+# Construct the path to the dataset relative to the script's location
+# The script expects to be in the root of the NIDS project folder.
+# The dataset is expected to be in a subfolder named 'CIC-IDS2017'
+CWD = os.getcwd()
+DATASET_PATH = os.path.join(CWD, "CIC-IDS2017")
 
 all_files = glob.glob(os.path.join(DATASET_PATH, "*.csv"))
 

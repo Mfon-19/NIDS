@@ -6,4 +6,11 @@ CICFlowMeter/
 
 README.txt
 
-trained_model_files/
+# Exclude the directory containing saved models
+/trained_model_files/
+
+# Exclude log files if any are generated
+*.log
+
+# IDE specific files
+.idea/
