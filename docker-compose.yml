@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  nids_api:
+    build: .
+    container_name: nids_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data/raw:/app/data/raw:ro
+    restart: unless-stopped
+    environment:
+      - DATASET_PATH=/app/data/raw

@@ -1,0 +1,36 @@
+name: Docker CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image
+        run: docker build -t nids-api:ci .
+
+      - name: Run container
+        run: |
+          docker run -d --name nids_api_test -p 8000:8000 nids-api:ci
+          # wait for app
+          for i in $(seq 1 30); do
+            if curl -s http://localhost:8000/health | grep -q 'ok'; then
+              echo "API is up!" && exit 0
+            fi
+            sleep 2
+          done
+          echo "API failed to start" && docker logs nids_api_test && exit 1
+
+      - name: Cleanup
+        if: always()
+        run: docker rm -f nids_api_test || true
